@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seminar Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        fieldset {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 2px solid #ccc;
+        }
+        legend {
+            font-weight: bold;
+        }
+        label {
+            display: block;
+            margin: 8px 0 4px;
+        }
+        input[type="text"], input[type="email"], select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Seminar Registration Form</h1>
+
+    <form action="#" method="post">
+        
+        <!-- Personal Information -->
+        <fieldset>
+            <legend>Personal Information</legend>
+            
+            <label for="fullname">Full Name:</label>
+            <input type="text" id="fullname" name="fullname" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="phone">Phone Number:</label>
+            <input type="text" id="phone" name="phone">
+        </fieldset>
+
+        <!-- Gender -->
+        <fieldset>
+            <legend>Gender</legend>
+            
+            <label>
+                <input type="radio" name="gender" value="male" required> Male
+            </label>
+            <label>
+                <input type="radio" name="gender" value="female"> Female
+            </label>
+            <label>
+                <input type="radio" name="gender" value="other"> Other
+            </label>
+        </fieldset>
+
+        <!-- Interests -->
+        <fieldset>
+            <legend>Interests</legend>
+            
+            <label>
+                <input type="checkbox" name="interests" value="workshops"> Workshops
+            </label>
+            <label>
+                <input type="checkbox" name="interests" value="networking"> Networking
+            </label>
+            <label>
+                <input type="checkbox" name="interests" value="seminar-materials"> Seminar Materials
+            </label>
+        </fieldset>
+
+        <!-- Seminar Selection -->
+        <fieldset>
+            <legend>Choose a Seminar</legend>
+            
+            <label for="seminar">Select a Seminar:</label>
+            <select id="seminar" name="seminar" required>
+                <option value="">--Please choose an option--</option>
+                <option value="web-development">Web Development</option>
+                <option value="data-science">Data Science</option>
+                <option value="cyber-security">Cyber Security</option>
+                <option value="ai-ml">AI & ML</option>
+            </select>
+        </fieldset>
+
+        <!-- Submit Button -->
+        <fieldset>
+            <input type="submit" value="Register">
+        </fieldset>
+
+    </form>
+
+</body>
+</html>
