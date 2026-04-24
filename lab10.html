@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Designing Lab - iFrame Demo</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #f4f4f4;
+        }
+
+        header {
+            background: #002147;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .buttons {
+            text-align: center;
+            margin: 15px;
+        }
+
+        .buttons button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .buttons button:hover {
+            background: #0056b3;
+        }
+
+        iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+        }
+
+        footer {
+            background: #002147;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <h2>Web Designing Lab</h2>
+        <p>Embedding Maps & Video using iFrame</p>
+    </header>
+
+    <!-- Buttons -->
+    <div class="buttons">
+        <button onclick="loadMap()">SIT Pune Map</button>
+        <button onclick="loadVideo()">Web Designing Video</button>
+    </div>
+
+    <!-- iFrame -->
+    <iframe id="frame" src=""></iframe>
+
+    <!-- Footer -->
+    <footer>
+        Practical: Embedding External Content using iFrame
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        function loadMap() {
+            document.getElementById("frame").src =
+            "https://www.google.com/maps?q=Symbiosis+Institute+of+Technology+Pune&output=embed";
+        }
+
+        function loadVideo() {
+            document.getElementById("frame").src =
+            "https://www.youtube.com/embed/UB1O30fR-EE";
+        }
+    </script>
+
+</body>
+</html>
