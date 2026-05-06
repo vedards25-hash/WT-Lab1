@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Voyager Pro Dashboard</title>
+ <style>
+ :root {
+ --primary: #6366f1;
+ --secondary: #ec4899;
+ --bg: #f1f5f9;
+ --card: #ffffff;
+ }
+ body {
+ font-family: 'Inter', sans-serif;
+ background-color: var(--
+margin: 0;
+ padding: 40px 20px;
+ color: #1e293b;
+ }
+ .dashboard {
+ max-width: 900px;
+ margin: 0 auto;
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 25px;
+ }
+ .card {
+ background: var(--card);
+ padding: 24px;
+ border-radius: 16px;
+ shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+ border: 1px solid #e2e8f0;
+ }
+ .full-width { grid-column: span 2; }
+h2 { margin-top: 0; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; }
+ /* Drag & Drop */
+ .drop-area {
+ min-height: 120px;
+ background: #f8fafc;
+ border: 2px dashed #cbd5e1;
+ border-radius: 12px;
+ padding: 15px;
+ display: flex;
+ flex-wrap: wrap;
+ gap: 10px;
+ align-content: flex-start;
+ transition: all 0.3s ease;
+ }
+ .drop-area.active { border-color: var(--primary); background: #eef2ff; }
+location-tag {
+ background: var(--primary);
+ color: white;
+ padding: 10px 18px;
+ border-radius: 8px;
+ cursor: grab;
+ user-select: none;
+ font-weight: 500;
+ box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+ }
+ .location-tag:active { cursor: grabbing; }
+ /* Buttons & Outputs */
+ button {
+ background: #0f172a;
+ color: white;
+ border: none;
+ padding: 12px 20px;
+ border-radius: 8px;
+ cursor: pointer;
+ font-weight: 600;
+width: 100%;
+ margin-top: 10px;
+ }
+ #geo-status {
+ display: block;
+ margin-top: 15px;
+ font-family: monospace;
+ color: var(--secondary);
+ }
+ .storage-indicator {
+ font-size: 0.8rem;
+ color: #94a3b8;
+ margin-top: 10px;
+ display: block;
+ }
+ </style>
+</head>
+<body>
+<div class="dashboard">
+ <div class="card">
+ <h2>📍 Start Point</h2>
+ <p>Ping your current GPS coordinates.</p>
+ <button onclick="findMe()">Get Location</button>
+ <code id="geo-status">Awaiting signal...</code>
+ </div>
+ <div class="card">
+ <h2>💾 Storage State</h2>
+ <p>Current items in <code>localStorage</code>:</p>
+ <div id="storage-debug" class="storage-indicator">[]</div>
+ <button onclick="resetData()" style="background: #ef4444;">Clear All Data</button>
+ </div>
+ <div class="card full-width">
+ <h2>🗺️ Destination Planner</h2>
+ <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+ <div>
+ <p>Available Spots:</p>
+ <div id="available-zone" class="drop-area" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
+<div class="location-tag" draggable="true" ondragstart="handleDrag(event)" id="london">London 🇬🇧</div>
+ <div class="location-tag" draggable="true" ondragstart="handleDrag(event)" id="kyoto">Kyoto 🇯🇵</div>
+ <div class="location-tag" draggable="true" ondragstart="handleDrag(event)" id="rome">Rome 🇮🇹</div>
+ </div>
+ </div>
+ <div>
+ <p>My Bucket List:</p>
+ <div id="bucket-zone" class="drop-area" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
+ </div>
+
+ </div>
+ </div>
+ </div>
+</div>
+<script>
+ /* --- GEOLOCATION API --- */
+ function findMe() {
+ const status = document.getElementById('geo-status');
+if (!navigator.geolocation) {
+ status.textContent = 'Not supported by browser';
+ return;
+ }
+ status.textContent = 'Locating...';
+ navigator.geolocation.getCurrentPosition(
+ (pos) => status.textContent = `${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`,
+ () => status.textContent = 'Access denied'
+ );
+ }
+ /* --- DRAG & DROP API --- */
+ function allowDrop(e) {
+ e.preventDefault();
+ }
+ function handleDrag(e) {
+ e.dataTransfer.setData("elementId", e.target.id);
+ }
+ function handleDrop(e) {
+ e.preventDefault();
+ const id = e.dataTransfer.getData("elementId");
+ const element = document.getElement
+const zone = e.target.closest('.drop-area');
+ if (zone) {
+ zone.appendChild(element);
+ saveToStorage(); // Sync to storage whenever a drop happens
+ }
+ }
+ /* --- WEB STORAGE API (Refined) --- */
+ function saveToStorage() {
+ const bucketZone = document.getElementById('bucket-zone');
+ // We only save the IDs of elements currently in the bucket list
+ const items = Array.from(bucketZone.children).map(child => child.id);
+
+ localStorage.setItem('saved_bucket_list', JSON.stringify(items));
+ updateDebugDisplay(items);
+ }
+ function loadFromStorage() {
+ const savedData = localStorage.getItem('saved_bucket_list');
+if (!savedData) return;
+ const itemIds = JSON.parse(savedData);
+ const bucketZone = document.getElementById('bucket-zone');
+ itemIds.forEach(id => {
+ const el = document.getElementById(id);
+ if (el) bucketZone.appendChild(el);
+ });
+ updateDebugDisplay(itemIds);
+ }
+ function updateDebugDisplay(data) {
+ document.getElementById('storage-debug').textContent = `JSON: ${JSON.stringify(data)}`;
+ }
+ function resetData() {
+ localStorage.removeItem('saved_bucket_list');
+ window.location.reload();
+ }
+ // Initialize on page load
+ window.onload = loadFromStorage;
+</script>
+</body>
+</html>
